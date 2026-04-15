@@ -543,6 +543,7 @@
     <li><a href="#profil">Profil</a></li>
     <li><a href="#parcours">Parcours</a></li>
     <li><a href="#competences">Compétences</a></li>
+    <li><a href="#projets">Projets</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
@@ -552,7 +553,7 @@
      SECTION 1 – HERO (Accueil)
      ─────────────────────────────────────────────────────────────
      Première impression du portfolio.
-     Contient : photo, nom, titre, boutons CTA.
+     Contient : photo, nom, titre, boutons CTA, compteurs clés.
      <section> + id = balise sémantique + ancre de navigation.
 ============================================================ -->
 <section id="accueil">
@@ -580,7 +581,27 @@
     <p class="subtitle">Étudiant en BTS SIO – Option SLAM</p>
 
     <!-- Boutons d'appel à l'action (Call To Action) -->
+    <a href="#projets" class="btn">Voir mes projets</a>
     <a href="#contact" class="btn btn-outline">Me contacter</a>
+
+    <!--
+      Compteurs de statistiques clés
+      ★ Modifie les chiffres selon ta réalité
+    -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-number">2</div>
+        <div class="stat-label">Stages effectués</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">1</div>
+        <div class="stat-label">Certification</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">10+</div>
+        <div class="stat-label">Technologies</div>
+      </div>
+    </div>
 
   </div>
 </section>
@@ -606,7 +627,7 @@
 
         Option B – Placeholder (actif par défaut) :
       -->
-      <div class="profil-photo-placeholder"><img src="images/profil.jpg" alt="Photo de Prénom NOM" class="profil-photo"></div>
+      <div class="profil-photo-placeholder">📷 Ta photo ici</div>
 
       <!-- ★ Remplace ce texte par ta présentation personnelle -->
       <div class="profil-text">
@@ -632,7 +653,7 @@
           Source : https://developer.mozilla.org/fr/docs/Web/HTML/Element/a#attr-download
         -->
         <a href="CV_TechnicienInfo_2026.pdf" class="btn" style="margin-top:.5rem" download>
-          Mon CV
+          Télécharger mon CV
         </a>
       </div>
 
@@ -652,10 +673,11 @@
      - Chaque point est un <div class="tl-dot"> en position absolute
      Inspiré de : https://css-tricks.com/
 
+     ★ Duplique un bloc <div class="tl-item"> pour ajouter une entrée.
 ============================================================ -->
 <section id="parcours">
   <div class="container">
-    <h2 class="section-title">Parcours</h2>
+    <h2 class="section-title">Mon Parcours</h2>
 
     <!-- Grille 2 colonnes pour les deux timelines côte à côte -->
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:3rem">
@@ -673,46 +695,20 @@
             <div class="tl-place">Reconversion avec le CNED, VANNES</div> <!-- ★ Ton lycée -->
             <div class="tl-desc">
               BTS Services Informatiques aux Organisations, spécialité
-              Solutions Logicielles et Applications Métiers
-            </div>
-
-          </div>
-          
-
-          <!-- ★ ENTRÉE 2 – CAP (modifie les infos) -->
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">2018</div>
-            <div class="tl-title">CAP Cuisine</div> <!-- ★ -->
-            <div class="tl-place">CFA, VANNES</div>
-            <div class="tl-desc">
-              Formation de Cuisinier en Alternance
+              Solutions Logicielles et Applications Métiers.
             </div>
           </div>
 
-          <!-- ★ ENTRÉE 3 – Licence (modifie les infos) -->
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">2014 - 2017</div>
-            <div class="tl-title">Niveau licence de Mathématiques</div> <!-- ★ -->
-            <div class="tl-place">Faculté de Mathématiques, RENNES</div>
-            <div class="tl-desc">
-              Dernière année non validée
-            </div>
-          </div>
-
-          <!-- ★ ENTRÉE 4 – BAC (modifie les infos) -->
+          <!-- ★ ENTRÉE 2 – BAC (modifie les infos) -->
           <div class="tl-item">
             <div class="tl-dot"></div>
             <div class="tl-date">2013</div>
             <div class="tl-title">BAC S</div> <!-- ★ Ta série de bac -->
             <div class="tl-place">Lycée Charles de Gaulle, VANNES</div>
             <div class="tl-desc">
-              Bac S Spé Maths
+              Bac S Spé Maths.
             </div>
           </div>
-
-          
 
 
         </div><!-- /.timeline -->
@@ -731,7 +727,7 @@
             <div class="tl-place">Entreprise Régalette, Saint Nolff</div> <!-- ★ entreprise -->
             <div class="tl-desc">
               Conception en VBA d'une solution automatisée de gestion et manipulation de données
-              adaptée aux outils de l'entreprise
+              adaptée aux outils de l'entreprise.
             </div>
           </div>
 
@@ -742,34 +738,9 @@
             <div class="tl-title">Stage 1ère année</div>
             <div class="tl-place">Centre Hospitalier Bretagne Atlantique, Vannes</div>
             <div class="tl-desc">
-              Maintenance de postes de travail et assistance utilisateur<Br>
-              Participation au traitement des incidents et au support de proximité<Br>
+              Maintenance de postes de travail et assistance utilisateur
+              Participation au traitement des incidents et au support
               Gestion de parc informatique
-            </div>
-          </div>
-
-          <!-- ★ ENTRÉE 3 – O2 -->
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">2023 – Aujourd'hui</div>
-            <div class="tl-title">Aide à domicile</div>
-            <div class="tl-place">Agence O2, Vannes</div>
-            <div class="tl-desc">
-              Développement du sens du service, de l'écoute et de l'adaptabilité<Br>
-              Organisation du travail en parallèle d'une formation à distance
-            </div>
-          </div>
-
-          <!-- ★ ENTRÉE 4 – Cuisinier -->
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">2018 – 2023</div>
-            <div class="tl-title">Cuisinier</div>
-            <div class="tl-place">En brasserie, Cuisinier puis second, Damgan et Vannes</div>
-            <div class="tl-desc">
-              Travail en équipe dans un environnement exigeant<Br>
-              Gestion du stress, des priorités et des imprévus<Br>
-              Rigueur, ponctualité et sens des responsabilités
             </div>
           </div>
 
@@ -796,10 +767,9 @@
 
       <!-- ── Carte : Développement Web ── -->
       <div class="skill-card">
-        <h4>Développement</h4>
+        <h4>Développement Web</h4>
         <!-- ★ Modifie les badges selon tes langages maîtrisés -->
         <span class="skill-tag">HTML</span>
-        <span class="skill-tag">VBA</span>
         <span class="skill-tag">CSS</span>
         <span class="skill-tag">JavaScript</span>
         <span class="skill-tag">PHP</span>
@@ -838,7 +808,7 @@
 </section>
 
 <!-- ============================================================
-     SECTION 5 – CONTACT
+     SECTION 6 – CONTACT
      ─────────────────────────────────────────────────────────────
      Deux colonnes : coordonnées à gauche, formulaire à droite.
 
@@ -857,11 +827,12 @@
 
       <!-- ── Colonne gauche : Coordonnées ── -->
       <div class="contact-info">
-        <p>Vous pouvez me contacter pour plus de renseignements, toute opportunité d'embauche ou de collaboration.</p>
+        <p>Tu peux me contacter pour toute opportunité de stage, alternance ou collaboration.</p>
 
         <!-- ★ Modifie chacune de ces lignes avec tes vraies coordonnées -->
 
         <div class="contact-item">
+          <div class="contact-icon">✉️</div>
           <div>
             <strong>Email</strong>
             <span>alec.bernard.56@gmail.com</span> <!-- ★ -->
@@ -869,6 +840,7 @@
         </div>
 
         <div class="contact-item">
+          <div class="contact-icon">📱</div>
           <div>
             <strong>Téléphone</strong>
             <span>+33 6 61 74 39 04</span> <!-- ★ -->
@@ -876,6 +848,7 @@
         </div>
 
         <div class="contact-item">
+          <div class="contact-icon">📍</div>
           <div>
             <strong>Localisation</strong>
             <span>PLAUDREN, Bretagne</span> <!-- ★ -->
@@ -887,7 +860,7 @@
            ★ Remplace l'adresse email dans action="mailto:..." par la tienne.
            required = champ obligatoire avant envoi du formulaire.
       -->
-      <form action="alec.bernard.56@gmail.com" method="post" enctype="text/plain">
+      <form action="mailto:ton.email@exemple.com" method="post" enctype="text/plain">
 
         <!-- type="text" = champ texte libre | required = obligatoire -->
         <input type="text"  name="nom"     placeholder="Votre nom"    required>
