@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  PORTFOLIO BTS SIO – SLAM
+  ============================================================
+  Auteur      : [BERNARD Alec]
+  Date        : 2026
+  Description : Portfolio monopages en HTML/CSS pur,
+                sans framework externe.
+
+  SOURCES & INSPIRATIONS :
+  ─────────────────────────────────────────────────────────────
+  • Structure et sections (hero, parcours, projets, contact) :
+    inspirées de https://elouanbret.alwaysdata.net/
+    et https://kothanromeo.dev/
+
+  • Système de variables CSS (custom properties) :
+    MDN Web Docs – Using CSS custom properties
+    https://developer.mozilla.org/fr/docs/Web/CSS/Using_CSS_custom_properties
+
+  • Navigation fixe avec backdrop-filter (effet verre) :
+    MDN Web Docs – backdrop-filter
+    https://developer.mozilla.org/fr/docs/Web/CSS/backdrop-filter
+
+  • Mise en page CSS Grid (grilles compétences, projets…) :
+    MDN Web Docs – CSS Grid Layout
+    https://developer.mozilla.org/fr/docs/Web/CSS/CSS_grid_layout
+
+  • Scroll fluide entre sections (scroll-behavior: smooth) :
+    MDN Web Docs – scroll-behavior
+    https://developer.mozilla.org/fr/docs/Web/CSS/scroll-behavior
+
+  • Typographie fluide avec clamp() :
+    MDN Web Docs – clamp()
+    https://developer.mozilla.org/fr/docs/Web/CSS/clamp
+
+  • Technique de la timeline verticale (pseudo-élément ::before) :
+    CSS-Tricks – Vertical Timeline
+    https://css-tricks.com/
+
+  • Pseudo-élément ::after pour le soulignement des titres :
+    MDN Web Docs – ::after
+    https://developer.mozilla.org/fr/docs/Web/CSS/::after
+
+  • Transitions CSS (hover sur boutons et cartes) :
+    MDN Web Docs – transition
+    https://developer.mozilla.org/fr/docs/Web/CSS/transition
+
+  • Formulaire mailto (envoi basique sans serveur) :
+    MDN Web Docs – element form
+    https://developer.mozilla.org/fr/docs/Web/HTML/Element/form
+
+  • Responsive Design avec @media queries :
+    MDN Web Docs – Media queries
+    https://developer.mozilla.org/fr/docs/Web/CSS/CSS_media_queries
+
+  • Accessibilité – attribut alt sur les images :
+    MDN Web Docs – img alt attribute
+    https://developer.mozilla.org/fr/docs/Web/HTML/Element/img#attr-alt
+  ============================================================
+-->
+<html lang="fr">
+<head>
+  <!-- Encodage UTF-8 : permet les caractères spéciaux (accents, etc.) -->
+  <meta charset="UTF-8">
+
+  <!--
+    Viewport responsive :
+    width=device-width  → la largeur correspond à celle de l'écran
+    initial-scale=1.0   → pas de zoom au chargement sur mobile
+    Source : https://developer.mozilla.org/fr/docs/Web/HTML/Viewport_meta_tag
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Titre affiché dans l'onglet du navigateur -->
+  <title>Prénom NOM – Portfolio BTS SIO</title>
+
+  <style>
+
+    /* ============================================================
+       VARIABLES CSS GLOBALES (Custom Properties)
+       ─────────────────────────────────────────────────────────────
+       Définies sur :root pour être accessibles partout dans le CSS.
+       Modifier --accent ici change la couleur principale sur
+       l'ensemble du site en une seule ligne.
+       Source : MDN – CSS custom properties
+       https://developer.mozilla.org/fr/docs/Web/CSS/Using_CSS_custom_properties
+    ============================================================ */
+    :root {
+      --accent:       #4f46e5; /* Couleur principale (violet/indigo) – modifie ici */
+      --accent-light: #ede9fe; /* Version claire : fonds de badges et placeholders */
+      --accent-dark:  #3730a3; /* Version foncée : états hover des boutons */
+      --text:         #1e1b4b; /* Texte principal */
+      --text-muted:   #64748b; /* Texte secondaire (descriptions, labels) */
+      --bg:           #ffffff; /* Fond des sections impaires */
+      --bg-alt:       #f8fafc; /* Fond légèrement grisé des sections paires */
+      --border:       #e2e8f0; /* Couleur des bordures */
+      --radius:       14px;    /* Arrondi des coins des cartes */
+      --shadow: 0 4px 24px rgba(79,70,229,.08); /* Ombre légère des cartes */
+    }
+
+    /* ============================================================
+       RESET CSS
+       ─────────────────────────────────────────────────────────────
+       Supprime les marges/paddings par défaut des navigateurs.
+       box-sizing: border-box inclut padding et border dans la
+       largeur totale d'un élément – comportement plus prévisible.
+       Source : https://developer.mozilla.org/fr/docs/Web/CSS/box-sizing
+    ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /*
+      scroll-behavior: smooth
+      → Active le défilement animé lors d'un clic sur un lien ancre (#section)
+      Source : https://developer.mozilla.org/fr/docs/Web/CSS/scroll-behavior
+    */
+    html { scroll-behavior: smooth; }
+
+    /* Police système Segoe UI, fallback sur sans-serif générique */
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    /* Liens sans soulignement par défaut ; soulignement visible au survol */
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Les images ne débordent jamais de leur conteneur parent */
+    img { max-width: 100%; display: block; }
+
+
+    /* ============================================================
+       NAVIGATION FIXE
+       ─────────────────────────────────────────────────────────────
+       position: fixed  → reste visible pendant le scroll
+       z-index: 100     → passe au-dessus de tout le contenu
+       backdrop-filter  → effet "verre dépoli" sur le fond
+       Source : https://developer.mozilla.org/fr/docs/Web/CSS/backdrop-filter
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      background: rgba(255,255,255,.92); /* Blanc semi-transparent */
+      backdrop-filter: blur(12px);       /* Flou derrière la barre */
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .8rem 2rem;
+    }
+
+    /* Logo / initiales affiché à gauche */
+    .nav-logo { font-weight: 700; font-size: 1.1rem; color: var(--accent); }
+
+    /* Liste des liens de navigation (flex horizontal) */
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+    .nav-links a { color: var(--text); font-size: .9rem; font-weight: 500; }
+    .nav-links a:hover { color: var(--accent); text-decoration: none; }
+
+
+    /* ============================================================
+       SECTION HERO (Accueil)
+       ─────────────────────────────────────────────────────────────
+       min-height: 100vh → au moins toute la hauteur de l'écran
+       padding-top élevé → évite d'être masqué sous la nav fixe
+       clamp(min, val, max) → taille de police fluide
+       Source : https://developer.mozilla.org/fr/docs/Web/CSS/clamp
+    ============================================================ */
+    #accueil {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      background: linear-gradient(135deg, #f0f0ff 0%, #ffffff 60%);
+    }
+
+    /* Photo de profil ronde dans le hero */
+    .hero-avatar {
+      width: 140px; height: 140px;
+      border-radius: 50%;        /* Cercle parfait */
+      object-fit: cover;         /* Recadre sans déformer */
+      border: 4px solid var(--accent);
+      margin: 0 auto 1.5rem;
+    }
+
+    /* Cercle placeholder (initiales) quand pas encore de photo */
+    .hero-avatar-placeholder {
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      border: 4px solid var(--accent);
+      margin: 0 auto 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem; color: var(--accent); font-weight: 700;
+    }
+
+    /* Titre principal avec taille fluide entre 2rem et 3.2rem */
+    #accueil h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      margin-bottom: .4rem;
+    }
+    #accueil .subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    /* ── Boutons call-to-action ──
+       border-radius: 50px = forme "pilule"
+       transition anime la couleur et le déplacement au survol
+       Source : https://developer.mozilla.org/fr/docs/Web/CSS/transition
+    */
+    .btn {
+      display: inline-block;
+      padding: .75rem 1.8rem;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 50px;
+      font-weight: 600; font-size: .95rem;
+      transition: background .2s, transform .15s;
+    }
+    .btn:hover {
+      background: var(--accent-dark);
+      text-decoration: none;
+      transform: translateY(-2px); /* Légère élévation au survol */
+    }
+    /* Variante sans fond (contour seulement) */
+    .btn-outline {
+      background: transparent;
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      margin-left: .8rem;
+    }
+    .btn-outline:hover { background: var(--accent-light); }
+
+    /* ── Compteurs statistiques ──
+       flex + flex-wrap = s'adapte à la largeur disponible
+    */
+    .stats {
+      display: flex; gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+    .stat         { text-align: center; }
+    .stat-number  { font-size: 2.2rem; font-weight: 800; color: var(--accent); }
+    .stat-label   { font-size: .82rem; color: var(--text-muted); }
+
+
+    /* ============================================================
+       SECTIONS GÉNÉRIQUES
+       ─────────────────────────────────────────────────────────────
+       nth-child(even) → fond alterné pour créer un rythme visuel
+       .container centre et limite la largeur du contenu
+    ============================================================ */
+    section { padding: 5rem 2rem; }
+    section:nth-child(even) { background: var(--bg-alt); }
+    .container { max-width: 960px; margin: 0 auto; }
+
+    /*
+      Titre de section avec trait décoratif.
+      Le trait est un pseudo-élément ::after (aucun HTML supplémentaire).
+      Source : https://developer.mozilla.org/fr/docs/Web/CSS/::after
+    */
+    .section-title {
+      font-size: 1.9rem; font-weight: 800;
+      margin-bottom: 2.5rem; text-align: center;
+      position: relative; /* Contexte pour ::after si besoin */
+    }
+    .section-title::after {
+      content: '';         /* Élément vide, uniquement décoratif */
+      display: block;
+      width: 48px; height: 4px;
+      border-radius: 2px;
+      background: var(--accent);
+      margin: .6rem auto 0;
+    }
+
+
+    /* ============================================================
+       SECTION PROFIL – grille photo + texte
+       ─────────────────────────────────────────────────────────────
+       grid-template-columns: 1fr 2fr
+       → colonne photo 1/3 de la largeur, texte 2/3
+       Source : https://developer.mozilla.org/fr/docs/Web/CSS/CSS_grid_layout
+    ============================================================ */
+    .profil-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+    .profil-photo {
+      border-radius: var(--radius);
+      object-fit: cover;
+      width: 100%;
+      aspect-ratio: 3/4; /* Ratio portrait : 3 de large pour 4 de haut */
+    }
+    /* Placeholder portrait si pas encore de photo */
+    .profil-photo-placeholder {
+      border-radius: var(--radius);
+      width: 100%; aspect-ratio: 3/4;
+      background: var(--accent-light);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent); font-size: .9rem; font-weight: 500;
+    }
+    .profil-text p {
+      font-size: 1rem; line-height: 1.8;
+      color: var(--text-muted); margin-bottom: 1rem;
+    }
+
+
+    /* ============================================================
+       TIMELINE (Parcours)
+       ─────────────────────────────────────────────────────────────
+       Ligne verticale = pseudo-élément ::before sur .timeline
+       Point coloré = <div class="tl-dot"> en position absolute
+       Technique inspirée de CSS-Tricks : https://css-tricks.com/
+    ============================================================ */
+    .timeline {
+      position: relative;
+      padding-left: 2rem; /* Espace pour la ligne et les points */
+    }
+    /* Ligne verticale continue dessinée avec ::before */
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: .5rem; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+    .tl-item {
+      position: relative; /* Contexte de positionnement pour .tl-dot */
+      margin-bottom: 2.5rem;
+    }
+    /* Point coloré sur la ligne de la timeline */
+    .tl-dot {
+      position: absolute;
+      left: -1.75rem; top: .3rem;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid var(--bg);         /* "Trou" qui décolle le point du fond */
+      box-shadow: 0 0 0 2px var(--accent); /* Anneau coloré extérieur */
+    }
+    /* Styles typographiques de la timeline */
+    .tl-date  { font-size: .8rem; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .05em; }
+    .tl-title { font-size: 1.05rem; font-weight: 700; margin: .2rem 0 .4rem; }
+    .tl-place { font-size: .85rem; color: var(--text-muted); }
+    .tl-desc  { font-size: .9rem; color: var(--text-muted); margin-top: .5rem; line-height: 1.7; }
+
+
+    /* ============================================================
+       COMPÉTENCES – grille de cartes
+       ─────────────────────────────────────────────────────────────
+       repeat(auto-fit, minmax(220px, 1fr)) :
+       crée automatiquement le bon nombre de colonnes selon
+       la largeur disponible – responsive sans media query.
+       Source : https://developer.mozilla.org/fr/docs/Web/CSS/repeat
+    ============================================================ */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    .skill-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      box-shadow: var(--shadow);
+    }
+    .skill-card h4 { font-size: .95rem; font-weight: 700; margin-bottom: 1rem; color: var(--accent); }
+
+    /* Badge "pilule" pour chaque technologie */
+    .skill-tag {
+      display: inline-block;
+      background: var(--accent-light); color: var(--accent-dark);
+      border-radius: 50px;
+      padding: .3rem .85rem; font-size: .8rem; font-weight: 500;
+      margin: .3rem .3rem 0 0;
+    }
+
+
+    /* ============================================================
+       PROJETS – grille de cartes avec effet hover
+       ─────────────────────────────────────────────────────────────
+       overflow: hidden → les images respectent les coins arrondis
+       transition + transform → élévation au survol
+    ============================================================ */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.8rem;
+    }
+    .project-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;           /* Masque ce qui dépasse des coins arrondis */
+      box-shadow: var(--shadow);
+      transition: transform .2s;  /* Anime l'élévation au survol */
+    }
+    .project-card:hover { transform: translateY(-4px); }
+
+    /* Image de capture */
+    .project-img {
+      width: 100%; height: 180px;
+      object-fit: cover;          /* Recadre sans déformer l'image */
+      background: var(--accent-light);
+    }
+    /* Placeholder si pas encore de capture */
+    .project-img-placeholder {
+      width: 100%; height: 180px;
+      background: var(--accent-light);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent); font-size: .9rem; font-weight: 500;
+    }
+    .project-body    { padding: 1.2rem 1.4rem; }
+    .project-body h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: .5rem; }
+    .project-body p  { font-size: .88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem; }
+    .project-tags    { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .project-link    { display: inline-block; font-size: .82rem; font-weight: 600; color: var(--accent); margin-top: .8rem; }
+
+
+    /* ============================================================
+       CONTACT – grille infos + formulaire
+    ============================================================ */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+    .contact-info p { font-size: 1rem; line-height: 1.8; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+    /* Ligne de coordonnée : icône carrée + label + valeur */
+    .contact-item { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1rem; }
+    .contact-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--accent-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0; /* Ne rétrécit pas quand l'espace manque */
+    }
+    .contact-item strong { display: block; font-size: .8rem; color: var(--text-muted); }
+    .contact-item span   { font-size: .95rem; }
+
+    /*
+      Formulaire de contact
+      action="mailto:..." → ouvre le client mail de l'utilisateur
+      Pour un envoi sans client mail, utiliser PHP mail() ou Formspree
+      Source : https://developer.mozilla.org/fr/docs/Web/HTML/Element/form
+    */
+    form { display: flex; flex-direction: column; gap: 1rem; }
+    form input, form textarea {
+      padding: .75rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: .95rem; font-family: inherit;
+      transition: border-color .2s; /* Anime l'apparition de la couleur au focus */
+    }
+    form input:focus, form textarea:focus {
+      outline: none;               /* Supprime le contour natif du navigateur */
+      border-color: var(--accent); /* Le remplace par notre couleur d'accent */
+    }
+    form textarea {
+      resize: vertical;   /* L'utilisateur peut agrandir en hauteur seulement */
+      min-height: 130px;
+    }
+    form button {
+      align-self: flex-start; /* Ne prend pas toute la largeur de la colonne */
+      padding: .75rem 2rem;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 50px;
+      font-weight: 600; font-size: .95rem;
+      cursor: pointer; transition: background .2s;
+    }
+    form button:hover { background: var(--accent-dark); }
+
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      text-align: center; padding: 2rem;
+      font-size: .85rem; color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+
+    /* ============================================================
+       RESPONSIVE – Media Queries
+       ─────────────────────────────────────────────────────────────
+       En dessous de 680px (smartphones) :
+       - Grilles multi-colonnes → 1 colonne
+       - Nav réduit ses espacements
+       Source : https://developer.mozilla.org/fr/docs/Web/CSS/CSS_media_queries
+    ============================================================ */
+    @media (max-width: 680px) {
+      nav { padding: .7rem 1.2rem; }
+      .nav-links { gap: 1rem; }
+
+      /* Grille profil et contact passent en 1 colonne */
+      .profil-grid, .contact-grid { grid-template-columns: 1fr; }
+
+      /* Photo de profil : carrée et centrée sur mobile */
+      .profil-photo, .profil-photo-placeholder {
+        aspect-ratio: 1;
+        max-width: 260px;
+        margin: 0 auto;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVIGATION
+     ─────────────────────────────────────────────────────────────
+     Barre fixe en haut de page, visible en permanence.
+     Les href="#id" déclenchent le scroll smooth vers la section.
+     <nav> est une balise sémantique HTML5 pour la navigation.
+     Source : https://developer.mozilla.org/fr/docs/Web/HTML/Element/nav
+============================================================ -->
+<nav>
+  <!-- Logo textuel (tes initiales) – ★ modifie "PN" -->
+  <div class="nav-logo">PN</div>
+
+  <!--
+    <ul> = liste non ordonnée sémantique pour les liens de navigation.
+    Chaque <li> contient un lien ancre vers une section de la page.
+  -->
+  <ul class="nav-links">
+    <li><a href="#accueil">Accueil</a></li>
+    <li><a href="#profil">Profil</a></li>
+    <li><a href="#parcours">Parcours</a></li>
+    <li><a href="#competences">Compétences</a></li>
+    <li><a href="#projets">Projets</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+
+<!-- ============================================================
+     SECTION 1 – HERO (Accueil)
+     ─────────────────────────────────────────────────────────────
+     Première impression du portfolio.
+     Contient : photo, nom, titre, boutons CTA, compteurs clés.
+     <section> + id = balise sémantique + ancre de navigation.
+============================================================ -->
+<section id="accueil">
+  <div>
+
+    <!--
+      ★ PHOTO DE PROFIL (hero)
+      ─────────────────────────────────
+      Option A – Vraie photo (recommandée) :
+        Remplace le <div> ci-dessous par :
+        <img src="images/ma-photo.jpg" alt="Photo de Prénom NOM" class="hero-avatar">
+        → Place tes images dans un sous-dossier "images/"
+        → L'attribut alt est OBLIGATOIRE pour l'accessibilité
+          Source : https://developer.mozilla.org/fr/docs/Web/HTML/Element/img#attr-alt
+
+      Option B – Placeholder initiales (actif par défaut) :
+        ★ Modifie par tes propres initiales.
+    -->
+    <div class="hero-avatar-placeholder">AB</div>
+
+    <!-- ★ Modifie ton prénom et ton nom -->
+    <h1>Alec <span style="color:var(--accent)">BERNARD</span></h1>
+
+    <!-- ★ Modifie ton titre / ta formation -->
+    <p class="subtitle">Étudiant en BTS SIO – Option SLAM</p>
+
+    <!-- Boutons d'appel à l'action (Call To Action) -->
+    <a href="#projets" class="btn">Voir mes projets</a>
+    <a href="#contact" class="btn btn-outline">Me contacter</a>
+
+    <!--
+      Compteurs de statistiques clés
+      ★ Modifie les chiffres selon ta réalité
+    -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-number">2</div>
+        <div class="stat-label">Stages effectués</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">1</div>
+        <div class="stat-label">Certification</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">10+</div>
+        <div class="stat-label">Technologies</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SECTION 2 – PROFIL
+     ─────────────────────────────────────────────────────────────
+     Présentation personnelle + photo portrait + bouton CV.
+     Grille CSS 2 colonnes : gauche = photo, droite = texte.
+============================================================ -->
+<section id="profil">
+  <div class="container">
+    <h2 class="section-title">Mon Profil</h2>
+
+    <div class="profil-grid">
+
+      <!--
+        ★ PHOTO PORTRAIT (section profil)
+        ─────────────────────────────────
+        Option A – Vraie photo :
+          <img src="images/profil.jpg" alt="Photo de Prénom NOM" class="profil-photo">
+
+        Option B – Placeholder (actif par défaut) :
+      -->
+      <div class="profil-photo-placeholder">📷 Ta photo ici</div>
+
+      <!-- ★ Remplace ce texte par ta présentation personnelle -->
+      <div class="profil-text">
+        <p>
+          Je suis étudiant en BTS Services Informatiques aux Organisations option SLAM
+          avec le <strong>CNED</strong> à <strong>Vannes</strong>.
+        </p>
+        <p>
+          Très attiré par le développement logiciel, je m'intéresse particulièrement
+          au développement fullstack et à la cybersécurité.
+        </p>
+        <p>
+          Je suis actuellement en reconversion professionnelle.
+          Mon objectif est d'intégrer une entreprise en solutions applicatives dans
+          la continuité de mon BTS.
+        </p>
+
+        <!--
+          Lien de téléchargement du CV
+          L'attribut "download" demande au navigateur de télécharger le fichier
+          plutôt que de l'ouvrir.
+          ★ Remplace "cv.pdf" par le chemin réel de ton CV.
+          Source : https://developer.mozilla.org/fr/docs/Web/HTML/Element/a#attr-download
+        -->
+        <a href="CV_TechnicienInfo_2026.pdf" class="btn" style="margin-top:.5rem" download>
+          Télécharger mon CV
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SECTION 3 – PARCOURS
+     ─────────────────────────────────────────────────────────────
+     Timeline chronologique en deux colonnes :
+     gauche = scolaire  /  droite = professionnel.
+
+     Technique :
+     - La ligne verticale est dessinée via .timeline::before
+     - Chaque point est un <div class="tl-dot"> en position absolute
+     Inspiré de : https://css-tricks.com/
+
+     ★ Duplique un bloc <div class="tl-item"> pour ajouter une entrée.
+============================================================ -->
+<section id="parcours">
+  <div class="container">
+    <h2 class="section-title">Mon Parcours</h2>
+
+    <!-- Grille 2 colonnes pour les deux timelines côte à côte -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:3rem">
+
+      <!-- ── Colonne gauche : Parcours Scolaire ── -->
+      <div>
+        <h3 style="font-size:1.1rem; margin-bottom:1.5rem; color:var(--accent)">Scolaire</h3>
+        <div class="timeline">
+
+          <!-- ★ ENTRÉE 1 – BTS SIO (modifie les infos) -->
+          <div class="tl-item">
+            <div class="tl-dot"></div> <!-- Point coloré sur la ligne verticale -->
+            <div class="tl-date">2024 – Aujourd'hui</div>
+            <div class="tl-title">BTS SIO – Option SLAM</div>
+            <div class="tl-place">Reconversion avec le CNED, VANNES</div> <!-- ★ Ton lycée -->
+            <div class="tl-desc">
+              BTS Services Informatiques aux Organisations, spécialité
+              Solutions Logicielles et Applications Métiers.
+            </div>
+          </div>
+
+          <!-- ★ ENTRÉE 2 – BAC (modifie les infos) -->
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-date">2013</div>
+            <div class="tl-title">BAC S</div> <!-- ★ Ta série de bac -->
+            <div class="tl-place">Lycée Charles de Gaulle, VANNES</div>
+            <div class="tl-desc">
+              Bac S Spé Maths.
+            </div>
+          </div>
+
+
+        </div><!-- /.timeline -->
+      </div>
+
+      <!-- ── Colonne droite : Expériences Professionnelles ── -->
+      <div>
+        <h3 style="font-size:1.1rem; margin-bottom:1.5rem; color:var(--accent)">Professionnel</h3>
+        <div class="timeline">
+
+          <!-- ★ ENTRÉE 1 – Stage 2ème année -->
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-date">Février 2026 – Avril 2026</div>
+            <div class="tl-title">Stage 2ème année</div>
+            <div class="tl-place">Entreprise Régalette, Saint Nolff</div> <!-- ★ entreprise -->
+            <div class="tl-desc">
+              Conception en VBA d'une solution automatisée de gestion et manipulation de données
+              adaptée aux outils de l'entreprise.
+            </div>
+          </div>
+
+          <!-- ★ ENTRÉE 2 – Stage 1ère année -->
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-date">Mai 2025 – Juin 2025</div>
+            <div class="tl-title">Stage 1ère année</div>
+            <div class="tl-place">Centre Hospitalier Bretagne Atlantique, Vannes</div>
+            <div class="tl-desc">
+              Maintenance de postes de travail et assistance utilisateur
+              Participation au traitement des incidents et au support
+              Gestion de parc informatique
+            </div>
+          </div>
+
+        </div><!-- /.timeline -->
+      </div>
+
+    </div><!-- /grille 2 colonnes -->
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SECTION 4 – COMPÉTENCES
+     ─────────────────────────────────────────────────────────────
+     Grille de cartes par catégorie de compétences.
+     Chaque technologie = un badge <span class="skill-tag">.
+     ★ Ajoute / supprime des cartes et badges selon tes compétences.
+============================================================ -->
+<section id="competences">
+  <div class="container">
+    <h2 class="section-title">Compétences</h2>
+
+    <div class="skills-grid">
+
+      <!-- ── Carte : Développement Web ── -->
+      <div class="skill-card">
+        <h4>Développement Web</h4>
+        <!-- ★ Modifie les badges selon tes langages maîtrisés -->
+        <span class="skill-tag">HTML</span>
+        <span class="skill-tag">CSS</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">PHP</span>
+        <span class="skill-tag">SQL</span>
+      </div>
+
+      <!-- ── Carte : Frameworks & Bibliothèques ── -->
+      <div class="skill-card">
+        <h4>Frameworks</h4>
+        <span class="skill-tag">Symfony</span>
+        <span class="skill-tag">Bootstrap</span>
+      </div>
+
+      <!-- ── Carte : Outils & Environnements ── -->
+      <div class="skill-card">
+        <h4>Outils</h4>
+        <span class="skill-tag">Git / GitHub</span>
+        <span class="skill-tag">VS Code</span>
+        <span class="skill-tag">NetBeans</span>
+        <span class="skill-tag">Windows10-11</span>
+      </div>
+
+      <!-- ── Carte : Cybersécurité ── -->
+      <div class="skill-card">
+        <h4>Cybersécurité</h4>
+        <span class="skill-tag">Wireshark</span>
+      </div>
+
+      <!--
+        ★ Pour ajouter une catégorie : copie-colle un bloc skill-card
+           et modifie le titre h4 et les badges.
+      -->
+
+    </div><!-- /.skills-grid -->
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 6 – CONTACT
+     ─────────────────────────────────────────────────────────────
+     Deux colonnes : coordonnées à gauche, formulaire à droite.
+
+     Le formulaire utilise action="mailto:..." pour ouvrir
+     le client mail local (Outlook, Thunderbird…).
+     Pour un envoi direct (sans client mail), utilise :
+     - PHP : mail()
+     - Service tiers : https://formspree.io/
+     Source : https://developer.mozilla.org/fr/docs/Web/HTML/Element/form
+============================================================ -->
+<section id="contact">
+  <div class="container">
+    <h2 class="section-title">Contact</h2>
+
+    <div class="contact-grid">
+
+      <!-- ── Colonne gauche : Coordonnées ── -->
+      <div class="contact-info">
+        <p>Tu peux me contacter pour toute opportunité de stage, alternance ou collaboration.</p>
+
+        <!-- ★ Modifie chacune de ces lignes avec tes vraies coordonnées -->
+
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <strong>Email</strong>
+            <span>alec.bernard.56@gmail.com</span> <!-- ★ -->
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">📱</div>
+          <div>
+            <strong>Téléphone</strong>
+            <span>+33 6 61 74 39 04</span> <!-- ★ -->
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <strong>Localisation</strong>
+            <span>PLAUDREN, Bretagne</span> <!-- ★ -->
+          </div>
+        </div>
+      </div><!-- /.contact-info -->
+
+      <!-- ── Colonne droite : Formulaire ──
+           ★ Remplace l'adresse email dans action="mailto:..." par la tienne.
+           required = champ obligatoire avant envoi du formulaire.
+      -->
+      <form action="mailto:ton.email@exemple.com" method="post" enctype="text/plain">
+
+        <!-- type="text" = champ texte libre | required = obligatoire -->
+        <input type="text"  name="nom"     placeholder="Votre nom"    required>
+
+        <!-- type="email" = le navigateur vérifie le format de l'adresse -->
+        <input type="email" name="email"   placeholder="Votre email"  required>
+
+        <input type="text"  name="sujet"   placeholder="Sujet">
+
+        <!-- textarea = zone de texte multiligne | resize: vertical dans le CSS -->
+        <textarea name="message" placeholder="Votre message..."></textarea>
+
+        <!-- type="submit" = déclenche l'envoi du formulaire -->
+        <button type="submit">Envoyer le message</button>
+
+      </form>
+
+    </div><!-- /.contact-grid -->
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+     ─────────────────────────────────────────────────────────────
+     ★ Modifie ton nom et l'année.
+============================================================ -->
+<footer>
+  <p>© 2026 Prénom NOM – Portfolio BTS SIO SLAM</p>
+  <p style="margin-top:.4rem">Conçu avec ❤️ – Tous droits réservés</p>
+</footer>
+
+</body>
+</html>
