@@ -3,13 +3,9 @@
   ============================================================
   PAGE PROJET – Modèle générique
   ============================================================
-  Auteur      : [Ton Prénom NOM]
+  Auteur      : [Alec BERNARD]
   Date        : 2026
-  Description : Page de détail d'un projet, dans la continuité
-                visuelle du portfolio principal (index.html).
-
-  ★ Pour créer projet2.html et projet3.html :
-    Duplique ce fichier et modifie les zones marquées ★
+  Description : Page de détail d'un projet
 
   SOURCES :
   • Mêmes variables CSS que index.html (cohérence visuelle)
@@ -220,8 +216,8 @@
      Lien retour vers le portfolio principal
 ============================================================ -->
 <nav>
-  <!-- ★ Modifie "PN" par tes initiales -->
-  <div class="nav-logo">PN</div>
+  <!-- ★ initiales -->
+  <div class="nav-logo">AB</div>
   <!-- Flèche retour vers le portfolio -->
   <a href="index.html" class="nav-back">← Retour au portfolio</a>
 </nav>
@@ -234,15 +230,13 @@
 <div class="projet-hero">
   <div>
     <!-- ★ Titre du projet -->
-    <h1>Nom du <span style="color:var(--accent)">Projet 1</span></h1>
+    <h1>Nom du <span style="color:var(--accent)">Projet applicatif CNED</span></h1>
 
-    <!-- ★ Courte accroche (une ligne) -->
-    <p class="subtitle">Courte description synthétique du projet</p>
+    <!-- ★ Courte accroche -->
+    <p class="subtitle">Ajouter des fonctionnalités à un de gestion de formations</p>
 
-    <!-- ★ Badges : garde ceux qui correspondent, supprime les autres -->
-    <span class="badge badge-en-cours">🚧 En cours</span>
-    <!-- <span class="badge badge-termine">✅ Terminé</span> -->
-    <span class="badge badge-stage">💼 Stage</span>
+    <!-- ★ Badges -->
+    <span class="badge badge-stage">Stage</span>
   </div>
 </div>
 
@@ -257,118 +251,47 @@
     <div class="description">
       <!-- ★ Présente le contexte du projet -->
       <p>
-        Décris ici le contexte du projet : dans quel cadre a-t-il été réalisé ?
-        (stage, cours, projet personnel…), pour quel client ou établissement ?
+        Au cours de mon BTS avec le CNED, dans le cadre d'une activité, ce projet
+        a été mis en place pour mettre en pratique les méthodes apprises au cours
+        de ces deux années.
       </p>
-      <!-- ★ Décris les objectifs -->
+      <!-- ★ Objectifs -->
       <p>
-        Quels étaient les objectifs ? Quelles fonctionnalités devaient être
-        développées ou maintenues ?
+        Il s'agissait de nettoyer le code, d'ajouter des fonctionnalités (ajouter, modifier,
+        trier) et de mettre en place le back office.
+        Des tests unitaires, d'intégration et fonctionnels ont aussi été effectués.
+        Lancer le déploiement du site.
+        Une documentation technique est disponible.
       </p>
-      <!-- ★ Décris ta contribution personnelle -->
+      <!-- ★ Conclusion -->
       <p>
-        Quel a été ton rôle précis dans ce projet ? Qu'as-tu appris ?
+        Cela m'a permis de voir concretement comment toute ces étapes se déroulent tout
+        en étant acteur dans l'évolution du projet.
       </p>
     </div>
   </div>
 </section>
 
-
 <!-- ============================================================
-     SECTION 2 – CAPTURE D'ÉCRAN
-     ★ Remplace le placeholder par une vraie capture quand tu l'as
-============================================================ -->
-<section>
-  <div class="container">
-    <h2 class="section-title">Aperçu</h2>
-
-    <!--
-      Option A – Vraie capture :
-        <img src="documents/capture-projet1.png" alt="Capture du projet 1" class="projet-capture">
-
-      Option B – Placeholder (actif par défaut) :
-    -->
-    <div class="projet-capture-placeholder">📸 Capture d'écran à venir</div>
-  </div>
-</section>
-
-
-<!-- ============================================================
-     SECTION 3 – TECHNOLOGIES UTILISÉES
-     ★ Modifie les badges selon les technos réelles du projet
+     SECTION 2 – TECHNOLOGIES UTILISÉES
+     ★ Badges
 ============================================================ -->
 <section>
   <div class="container">
     <h2 class="section-title">Technologies utilisées</h2>
     <div class="tags-liste">
       <!-- ★ Garde / modifie / ajoute des badges -->
-      <span class="skill-tag">HTML5</span>
-      <span class="skill-tag">CSS3</span>
-      <span class="skill-tag">JavaScript</span>
+      <span class="skill-tag">GitHub</span>
+      <span class="skill-tag">NetBeans</span>
       <span class="skill-tag">PHP</span>
       <span class="skill-tag">MySQL</span>
-      <span class="skill-tag">GitHub</span>
     </div>
   </div>
 </section>
 
 
 <!-- ============================================================
-     SECTION 4 – DOCUMENTS TÉLÉCHARGEABLES
-     ★ Modifie les noms de fichiers et labels
-     ★ Place tes fichiers dans un dossier "documents/" à côté du HTML
-     ★ Supprime les cartes dont tu n'as pas besoin
-============================================================ -->
-<section>
-  <div class="container">
-    <h2 class="section-title">Documents</h2>
-    <div class="docs-grid">
-
-      <!--
-        CARTE PDF
-        ★ Remplace "document1.pdf" par le vrai nom de ton fichier
-        ★ Remplace "Rapport de projet" par le vrai nom du document
-        L'attribut download déclenche le téléchargement
-      -->
-      <a href="documents/document1.pdf" class="doc-card" download>
-        <div class="doc-icon pdf">📄</div>
-        <div>
-          <div class="doc-name">Rapport de projet</div>
-          <div class="doc-label">Télécharger le PDF</div>
-        </div>
-      </a>
-
-      <!--
-        CARTE PDF 2
-        ★ Duplique ce bloc pour ajouter d'autres PDF
-      -->
-      <a href="documents/document2.pdf" class="doc-card" download>
-        <div class="doc-icon pdf">📄</div>
-        <div>
-          <div class="doc-name">Documentation technique</div>
-          <div class="doc-label">Télécharger le PDF</div>
-        </div>
-      </a>
-
-      <!--
-        CARTE EXCEL
-        ★ Remplace "tableau.xlsx" par le vrai nom de ton fichier
-      -->
-      <a href="documents/tableau.xlsx" class="doc-card" download>
-        <div class="doc-icon excel">📊</div>
-        <div>
-          <div class="doc-name">Tableau de suivi</div>
-          <div class="doc-label">Télécharger le fichier Excel</div>
-        </div>
-      </a>
-
-    </div><!-- /.docs-grid -->
-  </div>
-</section>
-
-
-<!-- ============================================================
-     SECTION 5 – LIEN VERS LE SITE INTERNET
+     SECTION 3 – LIEN VERS LE SITE INTERNET
      ★ Remplace le href et les textes par les vrais
      ★ Supprime cette section si pas de site en ligne
 ============================================================ -->
@@ -380,17 +303,17 @@
       target="_blank" ouvre le lien dans un nouvel onglet
       rel="noopener noreferrer" = bonne pratique de sécurité
       Source : https://developer.mozilla.org/fr/docs/Web/HTML/Element/a#attr-target
-      ★ Remplace le href par la vraie URL du site
+      ★ URL du site
     -->
-    <a href="https://www.exemple.com"
+    <a href="https://mediatekformationbts.alwaysdata.net"
        class="site-card"
        target="_blank"
        rel="noopener noreferrer">
       <div class="site-card-icon">🌐</div>
       <div>
         <div class="site-card-title">Voir le site en ligne</div>
-        <!-- ★ Remplace par la vraie URL -->
-        <div class="site-card-url">www.exemple.com</div>
+        <!-- ★ URL -->
+        <div class="site-card-url">mediatekformationbts</div>
       </div>
       <div style="margin-left:auto; font-size:1.2rem">→</div>
     </a>
@@ -401,10 +324,10 @@
 
 <!-- ============================================================
      FOOTER
-     ★ Modifie ton nom
+     ★ Nom
 ============================================================ -->
 <footer>
-  <p>© 2026 Prénom NOM – Portfolio BTS SIO SLAM</p>
+  <p>© 2026 Alec BERNARD – Portfolio BTS SIO SLAM</p>
   <p style="margin-top:.4rem">
     <a href="index.html">← Retour au portfolio</a>
   </p>
