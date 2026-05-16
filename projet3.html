@@ -1,13 +1,414 @@
 <!DOCTYPE html>
+<!--
+  ============================================================
+  PAGE PROJET – Modèle générique
+  ============================================================
+  Auteur      : [Ton Prénom NOM]
+  Date        : 2026
+  Description : Page de détail d'un projet, dans la continuité
+                visuelle du portfolio principal (index.html).
+
+  ★ Pour créer projet2.html et projet3.html :
+    Duplique ce fichier et modifie les zones marquées ★
+
+  SOURCES :
+  • Mêmes variables CSS que index.html (cohérence visuelle)
+  • MDN – CSS Grid : https://developer.mozilla.org/fr/docs/Web/CSS/CSS_grid_layout
+  • MDN – download : https://developer.mozilla.org/fr/docs/Web/HTML/Element/a#attr-download
+  • MDN – target="_blank" : https://developer.mozilla.org/fr/docs/Web/HTML/Element/a#attr-target
+  ============================================================
+-->
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Projet 3 - En construction</title>
+  <!-- ★ Modifie le titre de l'onglet -->
+  <title>Projet 3 – Portfolio BTS SIO</title>
+
+  <style>
+    /* ── Variables identiques au portfolio principal ── */
+    :root {
+      --accent:       #4f46e5;
+      --accent-light: #ede9fe;
+      --accent-dark:  #3730a3;
+      --text:         #1e1b4b;
+      --text-muted:   #64748b;
+      --bg:           #ffffff;
+      --bg-alt:       #f8fafc;
+      --border:       #e2e8f0;
+      --radius:       14px;
+      --shadow:       0 4px 24px rgba(79,70,229,.08);
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; color: var(--text); background: var(--bg); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; display: block; }
+
+    /* ── Navigation (identique au portfolio) ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(255,255,255,.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .8rem 2rem;
+    }
+    .nav-logo { font-weight: 700; font-size: 1.1rem; color: var(--accent); }
+    .nav-back {
+      display: flex; align-items: center; gap: .5rem;
+      font-size: .9rem; font-weight: 500; color: var(--text);
+      transition: color .2s;
+    }
+    .nav-back:hover { color: var(--accent); text-decoration: none; }
+
+    /* ── Hero du projet ── */
+    .projet-hero {
+      min-height: 38vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 7rem 2rem 3rem;
+      background: linear-gradient(135deg, #f0f0ff 0%, #ffffff 60%);
+      border-bottom: 1px solid var(--border);
+    }
+    .projet-hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800; margin-bottom: .6rem;
+    }
+    .projet-hero .subtitle {
+      font-size: 1rem; color: var(--text-muted); margin-bottom: 1.5rem;
+    }
+
+    /* Badges de statut */
+    .badge {
+      display: inline-block;
+      padding: .3rem 1rem; border-radius: 50px;
+      font-size: .8rem; font-weight: 600;
+      margin: .3rem .3rem 0 0;
+    }
+    .badge-en-cours  { background: #fef3c7; color: #92400e; }
+    .badge-termine   { background: #dcfce7; color: #166534; }
+    .badge-stage     { background: var(--accent-light); color: var(--accent-dark); }
+
+    /* ── Contenu principal ── */
+    .container { max-width: 900px; margin: 0 auto; padding: 0 2rem; }
+
+    section { padding: 3.5rem 2rem; }
+    section:nth-child(even) { background: var(--bg-alt); }
+
+    /* Titre de section avec trait décoratif */
+    .section-title {
+      font-size: 1.4rem; font-weight: 800;
+      margin-bottom: 1.5rem;
+      position: relative; padding-bottom: .7rem;
+    }
+    .section-title::after {
+      content: ''; display: block;
+      width: 40px; height: 3px; border-radius: 2px;
+      background: var(--accent);
+      position: absolute; bottom: 0; left: 0;
+    }
+
+    /* ── Description ── */
+    .description p {
+      font-size: 1rem; line-height: 1.85;
+      color: var(--text-muted); margin-bottom: 1rem;
+    }
+
+    /* ── Capture / image du projet ── */
+    .projet-capture {
+      width: 100%; border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      object-fit: cover;
+    }
+    .projet-capture-placeholder {
+      width: 100%; aspect-ratio: 16/9;
+      background: var(--accent-light);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent); font-size: 1rem; font-weight: 500;
+    }
+
+    /* ── Technologies utilisées ── */
+    .skill-tag {
+      display: inline-block;
+      background: var(--accent-light); color: var(--accent-dark);
+      border-radius: 50px; padding: .35rem .9rem;
+      font-size: .82rem; font-weight: 500;
+      margin: .3rem .3rem 0 0;
+    }
+    .tags-liste { margin-top: .5rem; }
+
+    /* ── Grille de documents téléchargeables ── */
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.2rem;
+      margin-top: .5rem;
+    }
+    /* Carte document (téléchargeable) */
+    .doc-card {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.3rem;
+      box-shadow: var(--shadow);
+      transition: transform .2s, border-color .2s;
+      text-decoration: none; color: var(--text);
+    }
+    .doc-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      text-decoration: none;
+    }
+    /* Icône du type de fichier */
+    .doc-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; flex-shrink: 0;
+    }
+    .doc-icon.pdf   { background: #fee2e2; }
+    .doc-icon.excel { background: #dcfce7; }
+    .doc-icon.word  { background: #dbeafe; }
+    .doc-name  { font-size: .92rem; font-weight: 600; margin-bottom: .2rem; }
+    .doc-label { font-size: .78rem; color: var(--text-muted); }
+
+    /* ── Lien vers site internet ── */
+    .site-card {
+      display: flex; align-items: center; gap: 1.2rem;
+      background: var(--accent);
+      border-radius: var(--radius);
+      padding: 1.3rem 1.8rem;
+      color: #fff;
+      transition: background .2s, transform .2s;
+      text-decoration: none;
+      margin-top: .5rem;
+    }
+    .site-card:hover {
+      background: var(--accent-dark);
+      transform: translateY(-3px);
+      text-decoration: none;
+    }
+    .site-card-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .site-card-title { font-size: 1rem; font-weight: 700; margin-bottom: .2rem; }
+    .site-card-url   { font-size: .82rem; opacity: .85; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center; padding: 2rem;
+      font-size: .85rem; color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 680px) {
+      nav { padding: .7rem 1.2rem; }
+      .docs-grid { grid-template-columns: 1fr; }
+    }
+
+  </style>
 </head>
 <body>
-  <h1>Page en construction</h1>
-  <p>Ce projet sera bientôt disponible.</p>
-  <a href="index.html">← Retour au portfolio</a>
+
+<!-- ============================================================
+     NAVIGATION
+     Lien retour vers le portfolio principal
+============================================================ -->
+<nav>
+  <!-- ★ Modifie "PN" par tes initiales -->
+  <div class="nav-logo">PN</div>
+  <!-- Flèche retour vers le portfolio -->
+  <a href="index.html" class="nav-back">← Retour au portfolio</a>
+</nav>
+
+
+<!-- ============================================================
+     HERO DU PROJET
+     ★ Modifie le titre, le sous-titre et les badges
+============================================================ -->
+<div class="projet-hero">
+  <div>
+    <!-- ★ Titre du projet -->
+    <h1>Nom du <span style="color:var(--accent)">Projet 3</span></h1>
+
+    <!-- ★ Courte accroche (une ligne) -->
+    <p class="subtitle">Courte description synthétique du projet</p>
+
+    <!-- ★ Badges : garde ceux qui correspondent, supprime les autres -->
+    <span class="badge badge-en-cours">🚧 En cours</span>
+    <!-- <span class="badge badge-termine">✅ Terminé</span> -->
+    <span class="badge badge-stage">💼 Stage</span>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     SECTION 1 – DESCRIPTION
+     ★ Remplace le texte par la description réelle du projet
+============================================================ -->
+<section>
+  <div class="container">
+    <h2 class="section-title">Description du projet</h2>
+    <div class="description">
+      <!-- ★ Présente le contexte du projet -->
+      <p>
+        Décris ici le contexte du projet : dans quel cadre a-t-il été réalisé ?
+        (stage, cours, projet personnel…), pour quel client ou établissement ?
+      </p>
+      <!-- ★ Décris les objectifs -->
+      <p>
+        Quels étaient les objectifs ? Quelles fonctionnalités devaient être
+        développées ou maintenues ?
+      </p>
+      <!-- ★ Décris ta contribution personnelle -->
+      <p>
+        Quel a été ton rôle précis dans ce projet ? Qu'as-tu appris ?
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SECTION 2 – CAPTURE D'ÉCRAN
+     ★ Remplace le placeholder par une vraie capture quand tu l'as
+============================================================ -->
+<section>
+  <div class="container">
+    <h2 class="section-title">Aperçu</h2>
+
+    <!--
+      Option A – Vraie capture :
+        <img src="documents/capture-projet3.png" alt="Capture du projet 1" class="projet-capture">
+
+      Option B – Placeholder (actif par défaut) :
+    -->
+    <div class="projet-capture-placeholder">📸 Capture d'écran à venir</div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SECTION 3 – TECHNOLOGIES UTILISÉES
+     ★ Modifie les badges selon les technos réelles du projet
+============================================================ -->
+<section>
+  <div class="container">
+    <h2 class="section-title">Technologies utilisées</h2>
+    <div class="tags-liste">
+      <!-- ★ Garde / modifie / ajoute des badges -->
+      <span class="skill-tag">HTML5</span>
+      <span class="skill-tag">CSS3</span>
+      <span class="skill-tag">JavaScript</span>
+      <span class="skill-tag">PHP</span>
+      <span class="skill-tag">MySQL</span>
+      <span class="skill-tag">GitHub</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SECTION 4 – DOCUMENTS TÉLÉCHARGEABLES
+     ★ Modifie les noms de fichiers et labels
+     ★ Place tes fichiers dans un dossier "documents/" à côté du HTML
+     ★ Supprime les cartes dont tu n'as pas besoin
+============================================================ -->
+<section>
+  <div class="container">
+    <h2 class="section-title">Documents</h2>
+    <div class="docs-grid">
+
+      <!--
+        CARTE PDF
+        ★ Remplace "document1.pdf" par le vrai nom de ton fichier
+        ★ Remplace "Rapport de projet" par le vrai nom du document
+        L'attribut download déclenche le téléchargement
+      -->
+      <a href="documents/document1.pdf" class="doc-card" download>
+        <div class="doc-icon pdf">📄</div>
+        <div>
+          <div class="doc-name">Rapport de projet</div>
+          <div class="doc-label">Télécharger le PDF</div>
+        </div>
+      </a>
+
+      <!--
+        CARTE PDF 2
+        ★ Duplique ce bloc pour ajouter d'autres PDF
+      -->
+      <a href="documents/document2.pdf" class="doc-card" download>
+        <div class="doc-icon pdf">📄</div>
+        <div>
+          <div class="doc-name">Documentation technique</div>
+          <div class="doc-label">Télécharger le PDF</div>
+        </div>
+      </a>
+
+      <!--
+        CARTE EXCEL
+        ★ Remplace "tableau.xlsx" par le vrai nom de ton fichier
+      -->
+      <a href="documents/tableau.xlsx" class="doc-card" download>
+        <div class="doc-icon excel">📊</div>
+        <div>
+          <div class="doc-name">Tableau de suivi</div>
+          <div class="doc-label">Télécharger le fichier Excel</div>
+        </div>
+      </a>
+
+    </div><!-- /.docs-grid -->
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SECTION 5 – LIEN VERS LE SITE INTERNET
+     ★ Remplace le href et les textes par les vrais
+     ★ Supprime cette section si pas de site en ligne
+============================================================ -->
+<section>
+  <div class="container">
+    <h2 class="section-title">Accéder au site</h2>
+
+    <!--
+      target="_blank" ouvre le lien dans un nouvel onglet
+      rel="noopener noreferrer" = bonne pratique de sécurité
+      Source : https://developer.mozilla.org/fr/docs/Web/HTML/Element/a#attr-target
+      ★ Remplace le href par la vraie URL du site
+    -->
+    <a href="https://www.exemple.com"
+       class="site-card"
+       target="_blank"
+       rel="noopener noreferrer">
+      <div class="site-card-icon">🌐</div>
+      <div>
+        <div class="site-card-title">Voir le site en ligne</div>
+        <!-- ★ Remplace par la vraie URL -->
+        <div class="site-card-url">www.exemple.com</div>
+      </div>
+      <div style="margin-left:auto; font-size:1.2rem">→</div>
+    </a>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+     ★ Modifie ton nom
+============================================================ -->
+<footer>
+  <p>© 2026 Prénom NOM – Portfolio BTS SIO SLAM</p>
+  <p style="margin-top:.4rem">
+    <a href="index.html">← Retour au portfolio</a>
+  </p>
+</footer>
+
 </body>
 </html>
